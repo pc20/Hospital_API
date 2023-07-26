@@ -1,4 +1,5 @@
 const Patient = require('../models/patients');
+const Doctor = require('../models/doctors');
 
 // register patient if not present
 module.exports.registerPaitent = async function (req, res) {
@@ -15,7 +16,7 @@ module.exports.registerPaitent = async function (req, res) {
             });
             return res.status(200).json({
                 message: "Patient successfully registered",
-                patient: patient,
+                patientDetails: { ...patient._doc, doctor: req.user.name },
             });
         } else {
             return res.status(200).json({
@@ -36,9 +37,12 @@ module.exports.createReport = async function (req, res) {
     try {
         // find patient
         const patient = await Patient.findById(req.params.id);
-        req.body.date = Date.now();
+        const newReport = {
+            status: req.body.status,
+            createdBy: req.user.name,
+        }
         // add report to patient
-        patient.reports.push(req.body);
+        patient.reports.push(newReport);
         patient.save();
         return res.status(200).json({
             message: "Report created successfully",
@@ -58,9 +62,11 @@ module.exports.patientReports = async function (req, res) {
         const patient = await Patient.findById(req.params.id);
         if (patient) {
             // sort reports
+            const doc = await Doctor.findById(patient.doctor);
             return res.status(200).json({
                 name: patient.name,
                 phoneNumer: patient.phoneNumber,
+                doctor: doc.name,
                 totalReports: patient.reports.length,
                 reports: patient.reports.sort((a, b) => a.date - b.date),
             });

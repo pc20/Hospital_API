@@ -19,6 +19,10 @@ const patientSchema = new mongooose.Schema({
             },
             date: {
                 type: Date,
+                default: Date.now(),
+            },
+            createdBy: {
+                type: String,
                 required: true,
             }
         }
