@@ -12,7 +12,8 @@ let opts = {
 
 //JWT authentication
 passport.use(new JWTStrategy(opts, function (jwtPayLoad, done) {
-    console.log(jwtPayLoad);
+
+    // Find doctor with the and set user as doc
     Doctor.findById(jwtPayLoad).then((doc) => {
         if (doc) {
             return done(null, doc);

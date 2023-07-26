@@ -5,8 +5,12 @@ const app = express();
 require("dotenv").config();
 
 const bodyParser = require('body-parser');
+
+// db connection
 const db = require('./config/mongoose');
 db();
+
+// authorization
 const passport = require('passport');
 const passportStrategy = require('./config/passport-jwt-Strategy');
 

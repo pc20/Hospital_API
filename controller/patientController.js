@@ -3,7 +3,7 @@ const Patient = require('../models/patients');
 // register patient if not present
 module.exports.registerPaitent = async function (req, res) {
     try {
-        // console.log(req);
+
         // search for patient
         let patient = await Patient.findOne({ phoneNumber: req.body.phoneNumber });
         if (!patient) {

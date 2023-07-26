@@ -39,16 +39,20 @@ module.exports.registerDoc = function (req, res) {
     }
 }
 
+// login Doctor and generate jwt token
 module.exports.loginDoc = async function (req, res) {
+    // find doctor
     const doc = await Doctor.findOne({ email: req.body.email });
     if (doc) {
+        // if passowrd doesn't match
         if (doc.password != req.body.password) {
             return res.status(422).json({
                 message: "Invalid username or password",
             });
         } else {
+            // generate token by passing doctor ID.
             return res.status(200).json({
-                message: "loged in successfully",
+                message: "logIn successful",
                 data: {
                     token: jwt.sign(doc.id, 'blahSomething'),
                 }
@@ -56,7 +60,7 @@ module.exports.loginDoc = async function (req, res) {
         }
     } else {
         return res.status(404).json({
-            message: "Doctoe not found",
+            message: "Doctor not found",
         });
     }
 }
